@@ -6,16 +6,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
+
+    public User() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     @Id
     private String id;
@@ -26,7 +30,7 @@ public class User {
     @Column(name = "lastname")
     private String lastname;
 
-    @Column(name ="user_email")
+    @Column(name = "user_email")
     private String email;
 
     @Column(name = "password")

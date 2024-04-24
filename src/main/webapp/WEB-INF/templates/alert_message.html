@@ -1,0 +1,15 @@
+<div th:fragment="alert_message"
+     role="alert"
+     th:class="${'alert alert-dismissible fade show mt-5 ' + alertClass}"
+     th:if="${message}" xmlns:th="http://www.w3.org/1999/xhtml">
+    [(${message})]
+    <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+</div>
+
+<div th:fragment="alert_message_from_i18n"
+     role="alert"
+     th:class="${'alert alert-dismissible fade show mt-5 ' + alertClass}"
+     th:if="${message}" xmlns:th="http://www.w3.org/1999/xhtml"
+     th:text="#{${message}}">
+    <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+</div>

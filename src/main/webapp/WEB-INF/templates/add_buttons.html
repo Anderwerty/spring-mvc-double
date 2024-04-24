@@ -1,0 +1,17 @@
+<div class="btn-group btn-group-sm justify-content-center align-content-center"
+     role="group"
+     th:fragment="add_buttons(entity_name)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <button class="btn btn-primary"
+            th:href="@{/__${entity_name}__/all}"
+            th:text="#{msg.add}"
+            type="submit">
+        Add
+    </button>
+    <a class="btn btn-secondary"
+       role="button"
+       th:href="@{/__${entity_name}__/all}"
+       th:text="#{msg.back}"
+       type="button">
+        Back
+    </a>
+</div>
