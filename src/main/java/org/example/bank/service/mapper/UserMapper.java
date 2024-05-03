@@ -26,6 +26,7 @@ public class UserMapper {
         return UserDto.builder()
                 .withId(user.getId())
                 .withFirstname(user.getFirstname())
+                .withLastname(user.getLastname())
                 .withEmail(user.getEmail())
                 .build();
     }

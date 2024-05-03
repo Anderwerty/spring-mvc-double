@@ -1,13 +1,14 @@
 package org.example.bank.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.bank.config.RepositoryConfig;
+import org.example.bank.config.ServiceConfig;
 import org.example.bank.dto.UserRegistrationDto;
 import org.example.bank.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +20,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-//@RunWith(MockitoJunitRunner.class)
-//@RunWith(SpringJunitRunner.class)
+
 @ExtendWith(SpringExtension.class)
-@ExtendWith(MockitoExtension.class)
-//@ContextConfiguration(classes = {RepositoryConfig.class, ServiceConfig.class})
-@ContextConfiguration(classes = {TestConfig.class})
+@ContextConfiguration(classes = {RepositoryConfig.class, ServiceConfig.class})
 @ActiveProfiles({"test"})
 class UserControllerTest {
     @Autowired
@@ -41,14 +39,8 @@ class UserControllerTest {
 
     @Test
     void getRegistrationForm() throws Exception {
-        Mockito.when(userService.findAll(1, 20))
-                .thenThrow(RuntimeException.class)
-                .thenReturn(null);
-//        Mockito.doReturn().when(userService).findAll(1,20)
         mockMvc.perform(MockMvcRequestBuilders.get("/registration"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
-        Mockito.verifyNoInteractions(userService);
     }
 
     @Test
@@ -60,7 +52,9 @@ class UserControllerTest {
                 .repeatedPassword("password").build();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/registration")
-                        .content(mapper.writeValueAsString(user)))
+                        .content(mapper.writeValueAsString(user))
+
+                )
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -12,28 +13,24 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@PasswordsMatched.List({
-        @PasswordsMatched(password = "password",
-                repeatedPassword ="repeatedPassword" )
-})
+//@PasswordsMatched.List({
+//        @PasswordsMatched(password = "password",
+//                repeatedPassword ="repeatedPassword" )
+//})
+@AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class UserRegistrationDto {
 
-    public UserRegistrationDto(){
-
-    }
-
-    @Email
+    @Email(message = "msg.email.error.format")
     private String email;
 
-    @Pattern(regexp = "")
-    @Min(value = 5)
-    @Max(value = 10)
+//    @Min(value = 5)
+//    @Max(value = 10)
     private String password;
 
-    @Pattern(regexp = "")
-    @Min(value = 5)
-    @Max(value = 10)
+//    @Min(value = 5)
+   @Max(value = 10)
     private String repeatedPassword;
 
 

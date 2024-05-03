@@ -20,7 +20,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableJpaRepositories("org.example.bank.repository")
 @EnableTransactionManagement
-@ComponentScan("org.example.bank.repository")
 public class RepositoryConfig {
     @Bean
     @Profile("test")
@@ -41,18 +40,17 @@ public class RepositoryConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Autowired DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
-        entityManager.setDataSource(dataSource);
-        entityManager.setPackagesToScan("org.example.bank.entity");
+        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactory.setDataSource(dataSource);
+        entityManagerFactory.setPackagesToScan("org.example.bank.entity");
 
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
         hibernateJpaVendorAdapter.setShowSql(true);
 
-        entityManager.setJpaVendorAdapter(hibernateJpaVendorAdapter);
+        entityManagerFactory.setJpaVendorAdapter(hibernateJpaVendorAdapter);
 
-        return entityManager;
+        return entityManagerFactory;
     }
-
 
     @Bean
     public PlatformTransactionManager transactionManager(@Autowired EntityManagerFactory entityManagerFactory) {

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +30,18 @@ public class UserController {
         return "registration_form";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login_form";
+    }
+
     @PostMapping("/registration")
-    public String register(@ModelAttribute("user") @Valid UserRegistrationDto user,
+    public String register(@ModelAttribute("newUser") @Valid UserRegistrationDto user,
                            BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("exceptionMessage", "");
+            String message = bindingResult.getFieldError().getDefaultMessage();
+            model.addAttribute("exceptionMessage", message);
             return "registration_form";
         }
 
@@ -49,14 +54,15 @@ public class UserController {
     // GET  /users?page=1&perPage=10
     // GET  /users?page=blabla&perPage=
     @GetMapping("/users")
-    public String getAllUsers(@RequestParam(defaultValue = "1", name = "page") String page,
-                              @RequestParam(defaultValue = "10") String perPage,
-                              ModelMap model) {
+    public String getAllUsers(@RequestParam(defaultValue = "1", name = "page", required = false) String page,
+                              @RequestParam(defaultValue = "10", name = "perPage", required = false) String perPage,
+                              Model model) {
         Integer userPage = convert(page, 1);
         Integer userPerPage = convert(perPage, 10);
 
-        Page<UserDto> users = userService.findAll(userPage, userPerPage);
-        model.addAttribute("users", users);
+        Page<UserDto> usersPage = userService.findAll(userPage - 1, userPerPage);
+        model.addAttribute("users", usersPage.getContent());
+        model.addAttribute("numberOfPages", usersPage.getTotalPages());
 
         return "users";
     }
@@ -69,6 +75,9 @@ public class UserController {
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
         model.addAttribute("text", "Our team works on this issue");
+        model.addAttribute("exception", ex.toString());
+        model.addAttribute("message", ex.getMessage());
+        model.addAttribute("cause", ex.getCause());
 
 //        ModelAndView modelAndView = new ModelAndView();
 //        modelAndView.setViewName("error/error_page");
@@ -81,7 +90,7 @@ public class UserController {
     private static Integer convert(String number, Integer defaultValue) {
         try {
             return Integer.parseInt(number);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return defaultValue;
         }
     }

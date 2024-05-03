@@ -46,7 +46,7 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setPrefix("/WEB-INF/templates/");
         resolver.setSuffix(".html");
         resolver.setApplicationContext(applicationContext);
-        resolver.setCacheable(true);
+//        resolver.setCacheable(true);
         resolver.setTemplateMode(HTML);
 
         return resolver;
